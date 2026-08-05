@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="5分钟，20题，发现驱动你行动的隐藏力量。基于《Drive》内在驱动力理论。">
+  <meta property="og:title" content="寻找你的内在驱动兽">
+  <meta property="og:description" content="5分钟，发现驱动你行动的隐藏力量">
+  <title>寻找你的内在驱动兽 | Find Your Inner Drive Animal</title>
+  <style>
+    :root {
+      --bg-deep: #0A0A1F;
+      --bg-card: rgba(255, 255, 255, 0.06);
+      --text-primary: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.75);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --aurora-teal: #2DD4BF;
+      --aurora-violet: #A78BFA;
+      --star-gold: #FCD34D;
+      --fox: #FB923C;
+      --wolf: #7DD3FC;
+      --dolphin: #FF8FA3;
+      --bear: #FBBF24;
+      --whale: #818CF8;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    #app {
+      width: 100%;
+      height: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0A0A1F 0%, #0D1230 55%, #0A1020 100%);
+    }
+    .screen {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      padding: var(--safe-top) 0 var(--safe-bottom);
+    }
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+    .stars {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: white;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    .aurora {
+      position: fixed;
+      top: 15%; left: 50%;
+      width: 600px; height: 600px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.15) 0%, rgba(167, 139, 250, 0.08) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+    }
+
+    /* Home */
+    .home-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 28px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .home-title {
+      font-size: clamp(40px, 11vw, 56px);
+      line-height: 1.12;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .home-subtitle {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 36px;
+      max-width: 320px;
+    }
+    .animal-preview {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 99px;
+      margin-bottom: 36px;
+      backdrop-filter: blur(10px);
+    }
+    .animal-preview svg {
+      width: 42px; height: 42px;
+    }
+    .btn-primary {
+      width: 100%;
+      max-width: 320px;
+      height: 58px;
+      border: none;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--aurora-teal), var(--aurora-violet));
+      color: var(--bg-deep);
+      font-size: 17px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: 0 8px 28px rgba(45, 212, 191, 0.32);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      margin-bottom: 16px;
+    }
+    .btn-primary:active { transform: scale(0.97); }
+    .home-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Quiz */
+    .quiz-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
+      padding: 56px 24px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+    .quiz-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+    }
+    .back-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .back-btn svg { width: 20px; height: 20px; }
+    .progress-bar {
+      flex: 1;
+      max-width: 220px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 99px;
+      margin-left: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--aurora-teal), var(--aurora-violet));
+      transition: width 0.3s ease;
+    }
+    .question-num {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .question-text {
+      font-size: 24px;
+      line-height: 1.45;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+    .options { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+      font-family: inherit;
+      color: inherit;
+      width: 100%;
+    }
+    .option:active { transform: scale(0.98); }
+    .option-letter {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--bg-deep);
+      flex-shrink: 0;
+    }
+    .option-text { font-size: 15px; line-height: 1.5; padding-top: 2px; }
+
+    /* Result */
+    .result-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
+      padding: 48px 24px 40px;
+    }
+    .result-header {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .result-animals {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 18px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .result-animals svg { width: 78px; height: 78px; }
+    .result-animals .times {
+      font-size: 32px;
+      color: rgba(255, 255, 255, 0.35);
+      font-weight: 300;
+    }
+    .result-names {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .combo-badge {
+      display: inline-block;
+      padding: 9px 20px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--fox), var(--bear));
+      color: var(--bg-deep);
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 auto 12px;
+      display: table;
+    }
+    .result-formula {
+      text-align: center;
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+    .chart-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    .chart-title {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-label {
+      width: 40px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 500;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.8s ease;
+    }
+    .info-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-subtle);
+    }
+    .info-card.highlight { border-color: rgba(251, 146, 60, 0.3); }
+    .info-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .info-card p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .btn-secondary {
+      width: 100%;
+      height: 54px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-subtle);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .btn-secondary svg { width: 18px; height: 18px; }
+    .cta-card {
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.12), rgba(167, 139, 250, 0.12));
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .cta-card p {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hidden { display: none !important; }
+    .fade-in { animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 360px) {
+      .home-title { font-size: 38px; }
+      .question-text { font-size: 21px; }
+      .result-names { font-size: 24px; }
+      .result-animals svg { width: 64px; height: 64px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="stars" id="stars"></div>
+    <div class="aurora"></div>
+
+    <!-- Home -->
+    <section class="screen active" id="screen-home">
+      <div class="home-content">
+        <div class="badge">5分钟 · 20题 · 动力画像</div>
+        <h1 class="home-title">寻找你的<br>内在驱动兽</h1>
+        <p class="home-subtitle">每个人都有一种隐藏的动力来源。<br>找到它，了解什么真正让你行动起来。</p>
+        <div class="animal-preview" id="home-preview"></div>
+        <button class="btn-primary" onclick="startQuiz()">开始探索</button>
+        <p class="home-meta">基于《Drive》内在驱动力理论</p>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="screen" id="screen-quiz">
+      <div class="quiz-content">
+        <div class="quiz-nav">
+          <button class="back-btn" onclick="prevQuestion()" aria-label="返回">
+            <svg viewBox="0 0 20 20" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="question-num" id="question-num">01 / 20</div>
+        <h2 class="question-text" id="question-text"></h2>
+        <div class="options" id="options"></div>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section class="screen" id="screen-result">
+      <div class="result-content">
+        <p class="result-header">你的内在驱动兽</p>
+        <div class="result-animals" id="result-animals"></div>
+        <h2 class="result-names" id="result-names"></h2>
+        <div class="combo-badge" id="combo-badge"></div>
+        <p class="result-formula" id="result-formula"></p>
+
+        <div class="chart-card">
+          <div class="chart-title">五维动力分布</div>
+          <div id="chart-bars"></div>
+        </div>
+
+        <div class="info-card highlight" id="advantages-card">
+          <h3>你的优势</h3>
+          <div id="advantages-list"></div>
+        </div>
+        <div class="info-card" id="challenge-card">
+          <h3>隐藏挑战</h3>
+          <div id="challenge-list"></div>
+        </div>
+        <div class="info-card" id="tips-card">
+          <h3>适合你的工作方式</h3>
+          <div id="tips-list"></div>
+        </div>
+
+        <button class="btn-secondary" onclick="shareResult()">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M14 7L10 11L6 7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11V3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14V16C4 17.1046 4.89543 18 6 18H14C15.1046 18 16 17.1046 16 16V14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          保存结果卡 / 分享给朋友
+        </button>
+
+        <div class="cta-card">
+          <p>想根据你的动力兽，设计专属成长系统？</p>
+          <button class="btn-primary" style="margin-bottom:0;" onclick="alert('WorkBuddy 接入入口（预留）')">开启我的 WorkBuddy</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
