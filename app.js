@@ -62,20 +62,20 @@
   const PUREBLOOD = { fox: '永动探索者', wolf: '不封顶登山者', dolphin: '天生共情体', bear: '造物本能者', whale: '深海信仰者' };
 
   const CHAPTERS = [
-    { icon: '🌲', name: '迷雾森林', theme: '发现你的自然动力' },
-    { icon: '🏔', name: '选择山谷', theme: '人生方向选择' },
-    { icon: '🌩', name: '暴风雨试炼', theme: '压力下的真实模式' },
-    { icon: '🌊', name: '内心湖泊', theme: '认识自己的深层动力' },
-    { icon: '🔥', name: '动力火种觉醒', theme: '成为你想成为的人' }
+    { icon: '🌲', name: '迷雾森林', theme: '发现你的自然动力', intro: '你握紧手中微光的种子，踏入迷雾森林。浓雾遮住前方，没有路标，也没有提示——你只能凭第一直觉向前。' },
+    { icon: '🏔', name: '选择山谷', theme: '人生方向的选择', intro: '穿过森林，你来到一片开阔山谷，那里有一个村庄。村长告诉你：前方有五条道路，每条路都会赋予你不同的力量。' },
+    { icon: '🌧', name: '暴风荒原', theme: '压力下的真实模式', intro: '离开村庄，天空突然变暗。你进入暴风荒原——这里没有答案，只有考验。' },
+    { icon: '🌊', name: '内心湖泊', theme: '认识深层动力', intro: '你来到一片平静湖泊。湖水如镜，映出你内心最深处的样子。' },
+    { icon: '🔥', name: '火种圣殿', theme: '成为你想成为的人', intro: '你终于来到森林深处。五种动物出现在你面前，你的动力火种，开始发光。' }
   ];
 
   const MILESTONES = [
-    { at: 0, icon: '🌲', text: '你踏入了驱动森林' },
+    { at: 0, icon: '🌲', text: '你踏入了迷雾森林' },
     { at: 3, icon: '🌿', text: '你穿越了「迷雾森林」', sub: '第一缕动力火花正在出现' },
     { at: 6, icon: '🏔', text: '你抵达「选择山谷」', sub: '不同道路正在等待你' },
     { at: 9, icon: '🌊', text: '你进入「内心湖泊」', sub: '你的真实动力开始浮现' },
     { at: 12, icon: '🔥', text: '你的动力火种正在燃烧' },
-    { at: 15, icon: '✨', text: '你抵达「觉醒之地」', sub: '你的动力兽即将出现' }
+    { at: 15, icon: '✨', text: '你抵达「火种圣殿」', sub: '你的动力兽即将出现' }
   ];
 
   const STORY_STEPS = [
@@ -93,116 +93,122 @@
   ];
 
   const QUESTIONS = [
-    { ch: 0, qname: '迷雾入口', weight: 1, scene: '你来到森林入口。面前出现五条道路。没有地图，没有提示。你会：', opts: [
-      { t: '走向最陌生的小路。「那里可能藏着新的发现。」', k: 'fox' },
-      { t: '观察地形。「哪条路成功概率最高？」', k: 'wolf' },
-      { t: '寻找同行者。「一起探索可能更好。」', k: 'dolphin' },
-      { t: '停下来思考。「我为什么要进入森林？」', k: 'whale' },
-      { t: '拿出工具。「也许我可以创造自己的路线。」', k: 'bear' }
+    // ===== 第一章：迷雾森林 =====
+    { ch: 0, qname: '迷雾入口', weight: 1, scene: '你踏入森林。浓雾遮住了前方。地面上出现五条小路。没有路标，也没有提示。你只能凭第一感觉选择。你会：', opts: [
+      { k: 'fox', t: '走向那条长满奇异植物的小路。虽然不知道通往哪里，但你很好奇：「那里一定藏着什么有趣的东西。」' },
+      { k: 'wolf', t: '观察每条路留下的痕迹。你想先判断：「哪条路最可能通向正确方向。」' },
+      { k: 'dolphin', t: '停下来等待其他旅人。你觉得：「大家一起交流，也许能找到更好的方向。」' },
+      { k: 'whale', t: '坐下来思考：「我来到这片森林，真正想寻找的是什么？」' },
+      { k: 'bear', t: '拿出工具。你想：「如果没有路，那我能不能自己创造一条？」' }
     ]},
-    { ch: 0, qname: '古老任务卷轴', weight: 1, scene: '森林守护者给你一张任务卷轴：「完成这个任务需要三个月，但没有任何标准答案。」你会：', opts: [
-      { t: '搜集各种资料，探索不同可能。', k: 'fox' },
-      { t: '拆解目标，制定计划。', k: 'wolf' },
-      { t: '寻找有经验的人交流。', k: 'dolphin' },
-      { t: '确认任务背后的意义。', k: 'whale' },
-      { t: '设计一个新的解决方案。', k: 'bear' }
+    { ch: 0, qname: '被遗忘的小屋', weight: 1, scene: '沿着道路前进。你发现森林深处有一间废弃小屋。屋里只有五件物品。守护者告诉你：「只能带走一件，它会影响你接下来的旅程。」你选择：', opts: [
+      { k: 'fox', t: '一本没有读完的书。你想：「里面可能藏着新的知识和未知答案。」' },
+      { k: 'wolf', t: '一把旧剑。你想：「未来一定会遇到挑战，我需要提升自己的能力。」' },
+      { k: 'dolphin', t: '一个传声铃。你想：「如果遇到困难，也许可以召唤伙伴。」' },
+      { k: 'whale', t: '一张古老地图。你想：「它也许记录着这片森林存在的秘密。」' },
+      { k: 'bear', t: '一颗特殊种子。你想：「也许我能让它成长成新的东西。」' }
     ]},
-    { ch: 0, qname: '魔法书', weight: 1, scene: '你发现一本无名之书。第一页写着：「真正的答案，需要自己创造。」你：', opts: [
-      { t: '翻阅其他资料寻找灵感。', k: 'fox' },
-      { t: '制定学习计划。', k: 'wolf' },
-      { t: '邀请别人一起讨论。', k: 'dolphin' },
-      { t: '思考背后的规律。', k: 'whale' },
-      { t: '开始创造自己的版本。', k: 'bear' }
+    { ch: 0, qname: '守林人的问题', weight: 1, scene: '离开小屋后，你遇见第一位守林人。他说：「很多旅人走到这里都会停下。不是因为困难，而是因为他们忘记了为什么出发。」他问：「如果没有奖励，没有掌声，没有人知道，你为什么还愿意继续？」', opts: [
+      { k: 'fox', t: '因为探索本身就让我兴奋。「我想知道前方还有什么。」' },
+      { k: 'wolf', t: '因为我想证明自己能够做到。「困难的事情更值得挑战。」' },
+      { k: 'dolphin', t: '因为这一路可能会遇见值得帮助的人。「我的行动也许能带来改变。」' },
+      { k: 'whale', t: '因为我相信这里一定有值得寻找的意义。「我想找到真正重要的东西。」' },
+      { k: 'bear', t: '因为我想留下些什么。「哪怕很小，也是我创造的东西。」' }
     ]},
-    { ch: 1, qname: '五扇门', weight: 2, scene: '山谷中出现五扇门。', opts: [
-      { t: '星辰门：进入未知世界。', k: 'fox' },
-      { t: '高峰门：挑战极限。', k: 'wolf' },
-      { t: '共鸣门：帮助别人。', k: 'dolphin' },
-      { t: '深海门：寻找重大意义。', k: 'whale' },
-      { t: '创造门：建立自己的作品。', k: 'bear' }
+    // ===== 第二章：选择山谷 =====
+    { ch: 1, qname: '五条道路', weight: 2, scene: '你只能选择一条。', opts: [
+      { k: 'fox', t: '星辰小径：一条通往未知世界的道路。没人知道终点在哪里，但沿途有无数新的发现。' },
+      { k: 'wolf', t: '高峰之路：一条陡峭山路。传说走到终点的人，会成为真正的强者。' },
+      { k: 'dolphin', t: '共鸣之路：一路上会遇见很多人。你们需要互相帮助才能前进。' },
+      { k: 'whale', t: '深海之路：通往一座古老神殿。那里隐藏着关于世界的问题。' },
+      { k: 'bear', t: '创造之路：那里没有现成道路，只有材料和工具。需要自己建立未来。' }
     ]},
-    { ch: 1, qname: '守护者的问题', weight: 1, scene: '守护者问：「如果十年后回头看，你希望自己留下什么？」', opts: [
-      { t: '我探索过很多未知。', k: 'fox' },
-      { t: '我成为了更强的人。', k: 'wolf' },
-      { t: '我帮助影响了很多人。', k: 'dolphin' },
-      { t: '我做过值得的事情。', k: 'whale' },
-      { t: '我创造了属于自己的东西。', k: 'bear' }
+    { ch: 1, qname: '村庄危机', weight: 1, scene: '来到村庄后，你发现村民遇到了一个难题：水源突然停止，大家不知道原因。你决定帮助他们。你的第一反应：', opts: [
+      { k: 'fox', t: '寻找资料。看看有没有其他地方遇到过类似问题。' },
+      { k: 'wolf', t: '分析问题。制定一个解决计划，一步一步排查原因。' },
+      { k: 'dolphin', t: '先询问村民：「你们真正需要解决的问题是什么？」' },
+      { k: 'whale', t: '思考：「为什么水源会消失？背后的原因是什么？」' },
+      { k: 'bear', t: '开始设计一个新的供水方案。也许可以彻底解决问题。' }
     ]},
-    { ch: 1, qname: '能量水晶', weight: 1, scene: '你获得一颗能量水晶。它会记录：「什么事情最容易让你充满力量？」', opts: [
-      { t: '发现新知识的时候。', k: 'fox' },
-      { t: '完成困难目标的时候。', k: 'wolf' },
-      { t: '帮助别人成功的时候。', k: 'dolphin' },
-      { t: '做有价值事情的时候。', k: 'whale' },
-      { t: '看到作品完成的时候。', k: 'bear' }
+    { ch: 1, qname: '村长的感谢', weight: 2, scene: '问题解决后，村长问你：「这一路上，什么瞬间让你感觉最有力量？」', opts: [
+      { k: 'fox', t: '发现自己学会了以前不会的东西。' },
+      { k: 'wolf', t: '完成了一件原本觉得困难的事情。' },
+      { k: 'dolphin', t: '看到别人因为你的帮助变得更好。' },
+      { k: 'whale', t: '发现自己正在做一件值得的事情。' },
+      { k: 'bear', t: '看到自己的想法真正变成现实。' }
     ]},
-    { ch: 2, qname: '暴风雨', weight: 2, scene: '突然暴雨降临。道路被毁。你：', opts: [
-      { t: '寻找新的路线。', k: 'fox' },
-      { t: '重新规划路线。', k: 'wolf' },
-      { t: '确认伙伴是否安全。', k: 'dolphin' },
-      { t: '思考是否值得继续。', k: 'whale' },
-      { t: '开始修建新的道路。', k: 'bear' }
+    // ===== 第三章：暴风荒原 =====
+    { ch: 2, qname: '暴风来临', weight: 2, scene: '突然暴风袭来。你的队伍被迫停下，道路全部消失。你会：', opts: [
+      { k: 'fox', t: '寻找新的路线。「也许还有隐藏出口。」' },
+      { k: 'wolf', t: '重新制定计划。「必须重新掌控局面。」' },
+      { k: 'dolphin', t: '先确认伙伴安全。「不能留下任何人。」' },
+      { k: 'whale', t: '思考：「我们为什么要继续前进？」' },
+      { k: 'bear', t: '收集材料。建造一个临时避难所。' }
     ]},
-    { ch: 2, qname: '失败的试炼', weight: 3, scene: '你挑战森林守护兽，失败。晚上，你坐在篝火旁。你的第一反应：', opts: [
-      { t: '失败让我发现了新的方法。', k: 'fox' },
-      { t: '我要找到问题，下次赢回来。', k: 'wolf' },
-      { t: '是不是我没有理解守护兽？', k: 'dolphin' },
-      { t: '这场挑战真正想告诉我什么？', k: 'whale' },
-      { t: '我要重新设计我的策略。', k: 'bear' }
+    { ch: 2, qname: '失败的试炼', weight: 3, scene: '你来到守护兽面前。你尝试挑战它，但是失败了。晚上，你坐在篝火旁。你想：', opts: [
+      { k: 'fox', t: '「失败让我发现了新的可能。」我要看看哪里还有突破。' },
+      { k: 'wolf', t: '「我还不够强。」我要训练，然后重新挑战。' },
+      { k: 'dolphin', t: '「是不是我没有理解守护兽？」我要找到真正的问题。' },
+      { k: 'whale', t: '「这场失败想告诉我什么？」我要重新确认方向。' },
+      { k: 'bear', t: '「原来的方法不行。」我要重新设计策略。' }
     ]},
-    { ch: 2, qname: '黑暗山洞', weight: 1, scene: '你进入山洞。里面有五条路。没有任何提示。你：', opts: [
-      { t: '选择最未知的一条。', k: 'fox' },
-      { t: '寻找规律判断路线。', k: 'wolf' },
-      { t: '等待伙伴一起决定。', k: 'dolphin' },
-      { t: '寻找进入山洞的意义。', k: 'whale' },
-      { t: '尝试创造工具探索。', k: 'bear' }
+    { ch: 2, qname: '暴风后的礼物', weight: 2, scene: '暴风结束，森林送给你一件礼物。你最希望获得：', opts: [
+      { k: 'fox', t: '一双能看见隐藏道路的眼睛。' },
+      { k: 'wolf', t: '一颗永远突破自己的心。' },
+      { k: 'dolphin', t: '一座能够连接所有人的桥。' },
+      { k: 'whale', t: '一本记录世界秘密的书。' },
+      { k: 'bear', t: '一双能够创造任何东西的手。' }
     ]},
-    { ch: 3, qname: '湖中倒影', weight: 3, scene: '湖面出现你的未来倒影。它问：「什么事情会让你坚持十年？」', opts: [
-      { t: '不断发现新的世界。', k: 'fox' },
-      { t: '不断突破自己。', k: 'wolf' },
-      { t: '持续帮助别人。', k: 'dolphin' },
-      { t: '完成重要使命。', k: 'whale' },
-      { t: '创造长期作品。', k: 'bear' }
+    // ===== 第四章：内心湖泊 =====
+    { ch: 3, qname: '未来倒影', weight: 3, scene: '湖面出现十年后的你。他说：「十年后，你最希望自己成为什么样的人？」', opts: [
+      { k: 'fox', t: '一个永远保持好奇的人。' },
+      { k: 'wolf', t: '一个不断突破极限的人。' },
+      { k: 'dolphin', t: '一个影响和帮助很多人的人。' },
+      { k: 'whale', t: '一个完成重要使命的人。' },
+      { k: 'bear', t: '一个创造独特作品的人。' }
     ]},
-    { ch: 3, qname: '智慧老人', weight: 1, scene: '老人问：「你为什么会拖延？」', opts: [
-      { t: '因为失去了兴趣。', k: 'fox' },
-      { t: '因为害怕失败。', k: 'wolf' },
-      { t: '因为缺少支持和反馈。', k: 'dolphin' },
-      { t: '因为不知道意义在哪里。', k: 'whale' },
-      { t: '因为想做到完美。', k: 'bear' }
+    { ch: 3, qname: '时间之河', weight: 2, scene: '湖水出现画面。你看到自己一天中最投入的时候。那个瞬间通常是：', opts: [
+      { k: 'fox', t: '探索新知识、新领域。' },
+      { k: 'wolf', t: '练习技能，不断提高。' },
+      { k: 'dolphin', t: '和别人交流、合作。' },
+      { k: 'whale', t: '深入思考重要问题。' },
+      { k: 'bear', t: '创造、设计、完成作品。' }
     ]},
-    { ch: 3, qname: '学徒试炼', weight: 1, scene: '你需要学习一种新能力。你选择：', opts: [
-      { t: '自由探索。', k: 'fox' },
-      { t: '系统训练。', k: 'wolf' },
-      { t: '寻找导师。', k: 'dolphin' },
-      { t: '理解底层逻辑。', k: 'whale' },
-      { t: '马上实践。', k: 'bear' }
+    { ch: 3, qname: '湖底的问题', weight: 2, scene: '湖底浮现一句话：「如果没有人看见你的努力，你还会继续吗？」', opts: [
+      { k: 'fox', t: '会，因为探索本身让我快乐。' },
+      { k: 'wolf', t: '会，因为成长过程本身有价值。' },
+      { k: 'dolphin', t: '不一定，我需要知道自己的努力是否帮助别人。' },
+      { k: 'whale', t: '会，只要它值得。' },
+      { k: 'bear', t: '会，因为创造过程本身让我满足。' }
     ]},
-    { ch: 4, qname: '最后的选择', weight: 3, scene: '森林给你一个机会：选择未来道路。', opts: [
-      { t: '探索一个未知领域。', k: 'fox' },
-      { t: '成为行业高手。', k: 'wolf' },
-      { t: '建立帮助他人的事业。', k: 'dolphin' },
-      { t: '解决一个重要问题。', k: 'whale' },
-      { t: '创造一个新的产品。', k: 'bear' }
+    // ===== 第五章：火种圣殿 =====
+    { ch: 4, qname: '最后的道路', weight: 3, scene: '动物告诉你：「未来，你只能选择一种人生方向。」你选择：', opts: [
+      { k: 'fox', t: '探索未知领域。' },
+      { k: 'wolf', t: '成为某个领域的高手。' },
+      { k: 'dolphin', t: '建立影响他人的事业。' },
+      { k: 'whale', t: '解决一个重要的问题。' },
+      { k: 'bear', t: '创造属于自己的作品。' }
     ]},
-    { ch: 4, qname: '最后的考验', weight: 1, scene: '森林告诉你：「你只能带走一种能力。」', opts: [
-      { t: '无限好奇。', k: 'fox' },
-      { t: '持续成长。', k: 'wolf' },
-      { t: '影响他人。', k: 'dolphin' },
-      { t: '坚定使命。', k: 'whale' },
-      { t: '创造能力。', k: 'bear' }
+    { ch: 4, qname: '动力兽的问题', weight: 2, scene: '动物问：「每一种力量都有自己的阴影。你的挑战是什么？」', opts: [
+      { k: 'fox', t: '我可能容易被新的可能吸引。' },
+      { k: 'wolf', t: '我可能对自己要求太高。' },
+      { k: 'dolphin', t: '我可能太在意别人。' },
+      { k: 'whale', t: '我可能想太远，行动太慢。' },
+      { k: 'bear', t: '我可能追求完美。' }
     ]},
-    { ch: 4, qname: '动力兽召唤', weight: 3, scene: '来到觉醒之地。五只动物出现。它们问：「你希望自己成为怎样的人？」', opts: [
-      { t: '保持探索的人。', k: 'fox' },
-      { t: '不断突破的人。', k: 'wolf' },
-      { t: '连接世界的人。', k: 'dolphin' },
-      { t: '创造价值的人。', k: 'whale' },
-      { t: '留下作品的人。', k: 'bear' }
+    { ch: 4, qname: '最终觉醒', weight: 3, scene: '动力兽问：「当未来迷茫时，你希望记住哪句话？」', opts: [
+      { k: 'fox', t: '「保持好奇，世界永远有新的可能。」' },
+      { k: 'wolf', t: '「继续前进，你会成为更好的自己。」' },
+      { k: 'dolphin', t: '「不要忘记人与人的连接。」' },
+      { k: 'whale', t: '「做值得做的事情。」' },
+      { k: 'bear', t: '「把想法变成现实。」' }
     ]}
   ];
 
   let current = 0;
   let answers = new Array(QUESTIONS.length).fill(null);
   let storyIndex = 0;
+  let introShownCh = -1;
 
   function init() {
     // stars
@@ -285,6 +291,25 @@
     if (e) e.stopPropagation();
     current = 0;
     answers = new Array(QUESTIONS.length).fill(null);
+    introShownCh = -1;
+    proceedToCurrent();
+  };
+
+  // 章节承接：进入新章节时先展示章节引言屏
+  function proceedToCurrent() {
+    const ch = QUESTIONS[current].ch;
+    if (ch > introShownCh) { showChapterIntro(ch); }
+    else { renderNode(); showScreen('screen-quiz'); }
+  }
+  function showChapterIntro(ch) {
+    introShownCh = ch;
+    const c = CHAPTERS[ch];
+    document.getElementById('ch-index').textContent = '第 ' + (ch + 1) + ' 章';
+    document.getElementById('ch-name').textContent = c.icon + ' ' + c.name;
+    document.getElementById('ch-desc').textContent = c.intro || '';
+    showScreen('screen-chapter');
+  }
+  window.enterChapter = function () {
     renderNode();
     showScreen('screen-quiz');
   };
@@ -324,7 +349,7 @@
     for (let i = 0; i < all.length; i++) all[i].classList.remove('selected');
     btn.classList.add('selected');
     setTimeout(function () {
-      if (current < QUESTIONS.length - 1) { current++; renderNode(); }
+      if (current < QUESTIONS.length - 1) { current++; proceedToCurrent(); }
       else { computeAndShow(); }
     }, 240);
   }
@@ -459,34 +484,35 @@
     ctx.font = '700 90px sans-serif';
     ctx.fillText('×', W / 2, cy + size / 2 + 34);
 
-    const grad = ctx.createLinearGradient(W / 2 - 240, 0, W / 2 + 240, 0);
-    grad.addColorStop(0, pa.color); grad.addColorStop(1, sa.color);
+    const grad = ctx.createLinearGradient(W / 2 - 280, 0, W / 2 + 280, 0);
+    grad.addColorStop(0, COLORS[r.primary]);
+    grad.addColorStop(1, COLORS[r.secondary]);
     ctx.fillStyle = grad;
-    ctx.font = '800 66px "PingFang SC","Noto Sans SC",sans-serif';
-    ctx.fillText(r.comboName, W / 2, 648);
+    ctx.font = '800 64px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('动力组合 · ' + r.comboName, W / 2, 648);
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '800 74px "PingFang SC","Noto Sans SC",sans-serif';
-    ctx.fillText(pa.name + ' × ' + sa.name, W / 2, 748);
+    ctx.font = '800 72px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText(pa.name + ' × ' + sa.name, W / 2, 744);
 
-    ctx.fillStyle = 'rgba(234,244,236,0.75)';
-    ctx.font = '400 40px "PingFang SC","Noto Sans SC",sans-serif';
-    ctx.fillText('核心燃料：' + r.fuel, W / 2, 826);
+    ctx.fillStyle = 'rgba(234,244,236,0.78)';
+    ctx.font = '500 40px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('核心燃料：' + r.fuel, W / 2, 824);
 
     ctx.fillStyle = 'rgba(234,244,236,0.7)';
     ctx.font = '400 36px "PingFang SC","Noto Sans SC",sans-serif';
-    wrapText(ctx, pa.tagline, W / 2, 906, 980, 46);
+    wrapText(ctx, pa.tagline, W / 2, 902, 980, 46);
 
     ctx.strokeStyle = 'rgba(255,255,255,0.12)';
     ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(140, 1000); ctx.lineTo(W - 140, 1000); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(140, 1004); ctx.lineTo(W - 140, 1004); ctx.stroke();
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = '700 40px "PingFang SC","Noto Sans SC",sans-serif';
-    ctx.fillText('你的动力兽是什么？来测测 →', W / 2, 1090);
+    ctx.font = '700 38px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('你的动力兽是什么？来测测 →', W / 2, 1092);
     ctx.fillStyle = 'rgba(234,244,236,0.5)';
     ctx.font = '400 30px "PingFang SC","Noto Sans SC",sans-serif';
-    ctx.fillText('寻找你的内在驱动兽', W / 2, 1140);
+    ctx.fillText('寻找你的内在驱动兽', W / 2, 1144);
 
     canvas.toBlob(async function (blob) {
       if (!blob) { alert('生成图片失败，请直接截图保存～'); return; }
