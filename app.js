@@ -85,6 +85,13 @@
     { lead: '旅程', text: '只有穿越整片森林的人，才能找回属于自己的动力兽。<br>你，准备好出发了吗？' }
   ];
 
+  const STORY_ART = [
+    '<svg viewBox="0 0 120 120" class="art-svg"><circle cx="60" cy="76" r="9" class="glow-pulse" fill="#F5C451"/><path d="M60 28 C74 52 80 62 70 82 C86 72 82 50 60 40 C50 56 52 72 44 82 C34 66 48 50 60 28 Z" fill="#F5C451" opacity="0.92"/></svg>',
+    '<svg viewBox="0 0 120 120" class="art-svg"><g fill="#CFE8E0"><circle cx="42" cy="82" r="3.2" class="drift d1"/><circle cx="72" cy="72" r="2.6" class="drift d2"/><circle cx="56" cy="92" r="2.2" class="drift d3"/><circle cx="86" cy="86" r="3" class="drift d4"/><circle cx="30" cy="70" r="2" class="drift d5"/></g></svg>',
+    '<svg viewBox="0 0 120 120" class="art-svg"><g fill="#123524" class="appear"><polygon points="34,98 50,54 66,98"/><polygon points="56,102 78,42 100,102"/><polygon points="18,102 35,62 52,102"/></g></svg>',
+    '<svg viewBox="0 0 120 120" class="art-svg"><g fill="#CFE8E0" class="footprints"><ellipse cx="60" cy="102" rx="7" ry="10"/><ellipse cx="57" cy="82" rx="6" ry="9" opacity="0.72"/><ellipse cx="63" cy="63" rx="5" ry="7.5" opacity="0.55"/><ellipse cx="59" cy="46" rx="4" ry="6" opacity="0.4"/><ellipse cx="64" cy="31" rx="3" ry="4.5" opacity="0.26"/></g></svg>'
+  ];
+
   const QUESTIONS = [
     { ch: 0, qname: '迷雾入口', weight: 1, scene: '你来到森林入口。面前出现五条道路。没有地图，没有提示。你会：', opts: [
       { t: '走向最陌生的小路。「那里可能藏着新的发现。」', k: 'fox' },
@@ -241,13 +248,24 @@
   }
 
   // ---- Story ----
+  function playWarp(cb) {
+    const v = document.getElementById('warpVeil');
+    v.classList.add('play');
+    setTimeout(cb, 440);
+    setTimeout(function () { v.classList.remove('play'); }, 800);
+  }
   window.goStory = function () {
-    storyIndex = 0;
-    renderStory();
-    showScreen('screen-story');
+    playWarp(function () {
+      storyIndex = 0;
+      renderStory();
+      showScreen('screen-story');
+    });
   };
   function renderStory() {
     const step = STORY_STEPS[storyIndex];
+    const art = document.getElementById('story-art');
+    art.innerHTML = STORY_ART[storyIndex];
+    art.classList.remove('show'); void art.offsetWidth; art.classList.add('show');
     document.getElementById('story-step').innerHTML =
       '<span class="lead">' + step.lead + '</span>' + step.text;
     const hint = document.getElementById('story-hint');
