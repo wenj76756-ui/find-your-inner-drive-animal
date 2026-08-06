@@ -294,9 +294,8 @@
     q.opts.forEach(function (opt) {
       const btn = document.createElement('button');
       btn.className = 'option' + (answers[current] === opt.k ? ' selected' : '');
-      btn.style.color = COLORS[opt.k];
       btn.onclick = function () { selectOption(opt.k, btn); };
-      btn.innerHTML = '<span class="opt-emoji">' + EMOJI[opt.k] + '</span><span class="opt-text">' + opt.t + '</span>';
+      btn.innerHTML = '<span class="opt-text">' + opt.t + '</span>';
       opts.appendChild(btn);
     });
   }
