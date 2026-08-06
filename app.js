@@ -345,23 +345,129 @@
       pa.challenges.concat(sa.challenges).slice(0, 3).map(function (t) { return '<p>⚠ ' + t + '</p>'; }).join('');
     document.getElementById('tips-list').innerHTML =
       pa.tips.concat(sa.tips).slice(0, 3).map(function (t) { return '<p>✔ ' + t + '</p>'; }).join('');
+    window.currentResult = { primary: primary, secondary: secondary, scores: scores, comboName: comboName, comboFormula: comboFormula };
   }
 
-  window.shareResult = function () {
-    const names = document.getElementById('result-names').textContent;
-    const combo = document.getElementById('combo-badge').textContent;
-    const text = '我的动力兽是 ' + names + '，组合称号「' + combo + '」。\n你的是什么？来测测 👉';
-    if (navigator.share) {
-      navigator.share({ title: '寻找你的内在驱动兽', text: text, url: location.href }).catch(function () {});
-    } else if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text + ' ' + location.href).then(function () {
-        alert('结果已复制到剪贴板，去朋友圈 / 小红书粘贴吧！');
-      }).catch(function () {
-        alert(text + '\n' + location.href);
-      });
-    } else {
-      alert(text + '\n' + location.href);
+  function loadSvg(key) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () { resolve(img); };
+      img.onerror = function () { resolve(null); };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(SVG[key]);
+    });
+  }
+
+  function showShareModal(url) {
+    var modal = document.getElementById('shareModal');
+    var img = document.getElementById('shareImg');
+    if (img) img.src = url;
+    if (modal) modal.classList.add('show');
+    var save = document.getElementById('saveShareBtn');
+    if (save) save.onclick = function () {
+      var a = document.createElement('a');
+      a.href = url; a.download = '我的动力兽.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    };
+  }
+
+  window.shareResult = async function () {
+    var r = window.currentResult;
+    if (!r) { alert('请先完成测试～'); return; }
+    var pa = ANIMALS[r.primary], sa = ANIMALS[r.secondary];
+    var W = 1080, H = 1350;
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+
+    // 背景渐变
+    var bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#0A0A1F');
+    bg.addColorStop(0.55, '#101430');
+    bg.addColorStop(1, '#12182C');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    // 极光光晕
+    function glow(x, y, rad, color) {
+      var g = ctx.createRadialGradient(x, y, 0, x, y, rad);
+      g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fill();
     }
+    glow(W * 0.25, H * 0.16, 380, 'rgba(45,212,191,0.22)');
+    glow(W * 0.82, H * 0.1, 320, 'rgba(167,139,250,0.18)');
+
+    // 顶部小标题
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '500 34px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('寻找你的内在驱动兽', W / 2, 118);
+
+    // 双兽
+    var imgA = await loadSvg(r.primary);
+    var imgB = await loadSvg(r.secondary);
+    var size = 300, cy = 210;
+    var startX = (W - (size * 2 + 70)) / 2;
+    if (imgA) ctx.drawImage(imgA, startX, cy, size, size);
+    if (imgB) ctx.drawImage(imgB, startX + size + 70, cy, size, size);
+
+    // × 号
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '700 90px sans-serif';
+    ctx.fillText('×', W / 2, cy + size / 2 + 34);
+
+    // 组合称号（渐变）
+    var grad = ctx.createLinearGradient(W / 2 - 220, 0, W / 2 + 220, 0);
+    grad.addColorStop(0, pa.color);
+    grad.addColorStop(1, sa.color);
+    ctx.fillStyle = grad;
+    ctx.font = '800 64px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText(r.comboName, W / 2, 648);
+
+    // 名称
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '800 76px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText(pa.name + ' × ' + sa.name, W / 2, 748);
+
+    // 动力密码
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.font = '400 40px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('动力密码：' + r.comboFormula, W / 2, 826);
+
+    // tagline
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '400 36px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText(pa.tagline, W / 2, 906, 940);
+
+    // 分隔线
+    ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(140, 984); ctx.lineTo(W - 140, 984); ctx.stroke();
+
+    // 底部 slogan
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '700 40px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('你的动力兽是什么？来测测 →', W / 2, 1078);
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '400 30px "PingFang SC","Noto Sans SC",sans-serif';
+    ctx.fillText('寻找你的内在驱动兽', W / 2, 1128);
+
+    // 导出并分享 / 预览
+    canvas.toBlob(async function (blob) {
+      if (!blob) { alert('生成图片失败，请直接截图保存～'); return; }
+      var file = new File([blob], 'drive-animal.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: '寻找你的内在驱动兽',
+            text: '我的动力兽是 ' + pa.name + ' × ' + sa.name
+          });
+          return;
+        } catch (e) { /* 用户取消，落到预览 */ }
+      }
+      var url = URL.createObjectURL(blob);
+      showShareModal(url);
+    }, 'image/png');
   };
 
   init();
